@@ -1,6 +1,6 @@
 {
   "name": "bd-dist",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "bd.js static middleware",
   "main": "index.js",
   "directories": {
