@@ -29,6 +29,7 @@ const routes = {}
  */
 
 module.exports = function serve (root, route = '/', opts = {}) {
+  console.log(root, route, opts)
   assert(root, 'root directory is required to serve files')
 
   // options
@@ -36,13 +37,13 @@ module.exports = function serve (root, route = '/', opts = {}) {
   opts.index = opts.index || 'index.html'
 
   routes[route] = opts
-  return async function serve (next) {
+  return async function serve (context, next) {
     await next()
-    var route = this.path.split('/')[1] || '/'
-    if (this.method !== 'HEAD' && this.method !== 'GET') return
+    var route = context.path.split('/')[1] || '/'
+    if (context.method !== 'HEAD' && context.method !== 'GET') return
     // response is already handled
-    if (this.body !== null || this.status !== 404) return
+    if ((context.body !== null && context.body !== undefined) || context.status !== 404) return
 
-    await send(this, this.path.slice(1 + route.length) || '/', routes[route])
+    await send(context, context.path.slice(1 + route.length) || '/', routes[route])
   }
 }
