@@ -29,7 +29,6 @@ const routes = {}
  */
 
 module.exports = function serve (root, route = '/', opts = {}) {
-  console.log(root, route, opts)
   assert(root, 'root directory is required to serve files')
 
   // options
