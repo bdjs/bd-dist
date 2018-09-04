@@ -3,13 +3,7 @@
  * Created by jiasm on 18/04/19
  */
 
-'use strict'
-
-/**
- * Module dependencies.
- */
-
-const resolve = require('path').resolve
+const { resolve } = require('path')
 const assert = require('assert')
 const send = require('koa-send')
 
@@ -28,7 +22,7 @@ const routes = {}
  * @api public
  */
 
-module.exports = function serve (root, route = '/', opts = {}) {
+module.exports = (root, route = '/', opts = {}) => {
   assert(root, 'root directory is required to serve files')
 
   // options
@@ -36,13 +30,13 @@ module.exports = function serve (root, route = '/', opts = {}) {
   opts.index = opts.index || 'index.html'
 
   routes[route] = opts
-  return async function serve (context, next) {
+  return async (context, next) => {
     await next()
-    var route = context.path.split('/')[1] || '/'
+    const route = context.path.split('/')[1] || '/'
     if (context.method !== 'HEAD' && context.method !== 'GET') return
     // response is already handled
     if ((context.body !== null && context.body !== undefined) || context.status !== 404) return
 
-    await send(context, context.path.slice(1 + route.length) || '/', routes[route])
+    return send(context, context.path.slice(1 + route.length) || '/', routes[route])
   }
 }
